@@ -375,7 +375,15 @@ class SerialFrame(CNCRibbon.PageLabelFrame):
 		Utils.setStr("Connection", "port",        self.portCombo.get().split("\t")[0])
 		Utils.setStr("Connection", "baud",        self.baudCombo.get())
 		Utils.setBool("Connection", "openserial", self.autostart.get())
-
+        
+        
+#===============================================================================
+# Joystick Frame
+#===============================================================================
+class JoystickFrame(CNCRibbon.PageExLabelFrame):
+	def __init__(self, master, app):
+		CNCRibbon.PageExLabelFrame.__init__(self, master, "Joystick", _("Joystick"), app)
+		print("Magic happens.")
 
 #===============================================================================
 # File Page
@@ -389,8 +397,5 @@ class FilePage(CNCRibbon.Page):
 	# Add a widget in the widgets list to enable disable during the run
 	#----------------------------------------------------------------------
 	def register(self):
-		self._register((FileGroup,
-				PendantGroup,
-				OptionsGroup,
-				CloseGroup),
-				(SerialFrame,))
+		self._register((FileGroup, PendantGroup, OptionsGroup,CloseGroup),
+			(SerialFrame, JoystickFrame))
