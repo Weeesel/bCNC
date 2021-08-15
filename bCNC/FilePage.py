@@ -383,7 +383,69 @@ class SerialFrame(CNCRibbon.PageLabelFrame):
 class JoystickFrame(CNCRibbon.PageExLabelFrame):
 	def __init__(self, master, app):
 		CNCRibbon.PageExLabelFrame.__init__(self, master, "Joystick", _("Joystick"), app)
-		print("Magic happens.")
+		
+		f = Frame(self())
+		f.pack(side=TOP, fill=X)
+		
+		# ---
+		row = 0
+		
+		b = Label(f, text=_("Device:"))
+		b.grid(row=row,column=0,sticky=E)
+		self.addWidget(b)
+
+		self.deviceCombo = tkExtra.Combobox(f, False, background=tkExtra.GLOBAL_CONTROL_BACKGROUND, width=16, command=self.deviceChange)
+		self.deviceCombo.grid(row=row, column=1, sticky=EW)
+		tkExtra.Balloon.set(self.deviceCombo, _("Select (or manual enter) device to connect"))
+		self.deviceCombo.set(Utils.getStr("Joystick", "device"))
+		self.addWidget(self.deviceCombo)
+		
+		self.connectBtn = Ribbon.LabelButton(
+			f,
+			image=Utils.icons["serial"],
+			text=_("Connect"),
+			compound=TOP,
+			command=None, # \todo
+			background=Ribbon._BACKGROUND
+		)
+		self.connectBtn.grid(row=row, column=2, padx=0, pady=0, sticky=E)
+		tkExtra.Balloon.set(self.connectBtn, _("Connect to joystick"))
+		
+		# ---
+		row = 1
+		
+		self.autoconnect = BooleanVar()
+		self.autoconnectCombo = Checkbutton(f, text=_("Auto connect"),
+			variable=self.autoconnect)
+		self.autoconnectCombo.grid(row=row, column=0, columnspan=2, sticky=W)
+		tkExtra.Balloon.set(self.autoconnectCombo, _("Automatically connect to joystick when available"))
+		self.autoconnect.set(Utils.getBool("Joystick", "autoconnect")) # \todo
+		self.addWidget(self.autoconnectCombo)
+		
+		self.updateBtn = Ribbon.LabelButton(
+			f,
+			image=Utils.icons["refresh"],
+			text=_("Refresh"),
+			compound=TOP,
+			command=None, # \todo
+			background=Ribbon._BACKGROUND
+		)
+		self.updateBtn.grid(row=row, column=2, padx=0, pady=0, sticky=E)
+		tkExtra.Balloon.set(self.updateBtn, _("Refresh list of joystick devices"))
+		
+		f.grid_columnconfigure(1, weight=1)
+		
+	#-----------------------------------------------------------------------
+	def deviceChange(self):
+		# \todo
+		print(self.deviceCombo.get())
+
+	#-----------------------------------------------------------------------
+	def saveConfig(self):
+		pass
+		# \todo
+		# Utils.setStr("Joystick", "device", self.app.controller)
+		# Utils.setBool("Joystick", "openserial", self.autostart.get())
 
 #===============================================================================
 # File Page
